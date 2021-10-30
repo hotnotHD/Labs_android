@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Lab3</string>
+    <string name="to_second">To second</string>
+    <string name="to_first">To first</string>
+    <string name="to_third">to third</string>
+    <string name="about">About</string>
+    <string name="Here">Здесь могла быть ваша реклама</string>
+    <string name="fragment_1">Fragment 1</string>
+    <string name="fragment_3">Fragment 3</string>
+    <string name="fragment_2">Fragment 2</string>
+</resources>

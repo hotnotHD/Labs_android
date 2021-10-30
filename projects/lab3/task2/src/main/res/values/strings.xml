@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lab3</string>
+    <string name="activity_1">Activity 1</string>
+    <string name="to_second">To second</string>
+    <string name="activity_2">Activity 2</string>
+    <string name="to_first">To first</string>
+    <string name="to_third">to third</string>
+    <string name="activity_3">Activity 3</string>
+    <string name="about">About</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="Here">Здесь могла быть ваша реклама</string>
+</resources>
