@@ -7,8 +7,7 @@ import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -23,18 +22,32 @@ class NavigationTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+    //+check on fragments
     @Test
-    fun testAbout() {
+    fun testAboutA() {
         openAbout()
         onView(withId(R.id.activity_about)).check(matches(isDisplayed()))
         pressBack()
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testAboutB() {
         onView(withId(R.id.bnToSecond)).perform(click())
         openAbout()
         onView(withId(R.id.activity_about)).check(matches(isDisplayed()))
         pressBack()
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testAboutC() {
+        onView(withId(R.id.bnToSecond)).perform(click())
         onView(withId(R.id.bnToThird)).perform(click())
         openAbout()
         onView(withId(R.id.activity_about)).check(matches(isDisplayed()))
+        pressBack()
+        onView(withId(R.id.fragment3)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -100,6 +113,29 @@ class NavigationTest {
         assertTrue(activityRule.scenario.state.isAtLeast(Lifecycle.State.DESTROYED))
     }
 
+    // 3 -> 1 was not checked
+    @Test
+    fun backStackTestThree(){
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        onView(withId(R.id.bnToFirst)).perform(click())
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToFirst)).perform(click())
+        pressBackUnconditionally()
+        assertTrue(activityRule.scenario.state.isAtLeast(Lifecycle.State.DESTROYED))
+    }
+
+    @Test
+    fun testMidBackA() {
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        onView(withId(R.id.bnToSecond)).perform(click())
+        pressBack()
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
     @Test
     fun destroyTest(){
         activityRule.scenario.recreate()
@@ -121,5 +157,44 @@ class NavigationTest {
         activityRule.scenario.recreate()
         onView(withId(R.id.bnToFirst)).perform(click())
         onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navUpTestA(){
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withContentDescription(R.string.nav_app_bar_navigate_up_description)).perform(click())
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navUpTestB(){
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        onView(withContentDescription(R.string.nav_app_bar_navigate_up_description)).perform(click())
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navUpTestAboutA(){
+        openAbout()
+        onView(withContentDescription(R.string.nav_app_bar_navigate_up_description)).perform(click())
+        onView(withId(R.id.fragment1)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navUpTestAboutB(){
+        onView(withId(R.id.bnToSecond)).perform(click())
+        openAbout()
+        onView(withContentDescription(R.string.nav_app_bar_navigate_up_description)).perform(click())
+        onView(withId(R.id.fragment2)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navUpTestAboutC(){
+        onView(withId(R.id.bnToSecond)).perform(click())
+        onView(withId(R.id.bnToThird)).perform(click())
+        openAbout()
+        onView(withContentDescription(R.string.nav_app_bar_navigate_up_description)).perform(click())
+        onView(withId(R.id.fragment3)).check(matches(isDisplayed()))
     }
 }
