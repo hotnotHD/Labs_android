@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">lab3_rework</string>
+    <string name="about">About</string>
+    <string name="to_second">to second</string>
+    <string name="to_first">to first</string>
+    <string name="to_third">to third</string>
+    <string name="here">Здесь могла быть ваша реклама</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+</resources>
