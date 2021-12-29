@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 class MainActivity : AppCompatActivity() {
     var secondsElapsed: Int = 0
     lateinit var textSecondsElapsed: TextView
-    lateinit var backgroundThread: ExecutorService
+    lateinit var future: Future<*>
 
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -28,31 +27,29 @@ class MainActivity : AppCompatActivity() {
                 secondsElapsed = getInt(STATE_SECONDS)
             }
         }
+
     }
 
     override fun onPause() {
-        super.onPause()
+        future.cancel(true)
         Log.d(TAG, "onPause")
-        backgroundThread.shutdown()
+        super.onPause()
     }
 
     override fun onResume() {
-        super.onResume()
         Log.d(TAG, "onResume")
-        backgroundThread = Executors.newFixedThreadPool(1)
-        backgroundThread.execute {
+        val backgroundThread = (applicationContext as MainApplication).executorService
+        future = backgroundThread.submit {
             while (!backgroundThread.isShutdown) {
                 Log.d(TAG, "$backgroundThread working")
-                try {
-                    Thread.sleep(1000)
-                    textSecondsElapsed.post {
-                        textSecondsElapsed.setText("Seconds elapsed: " + secondsElapsed++)
-                    }
-                } catch (e: Exception){
-                    Log.d(TAG, "error: $e")
+                Thread.sleep(1000)
+                textSecondsElapsed.post {
+                    textSecondsElapsed.setText("Seconds elapsed: " + secondsElapsed++)
                 }
+
             }
         }
+        super.onResume()
     }
 
     companion object {
